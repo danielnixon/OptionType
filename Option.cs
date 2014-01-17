@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
 
 public class OptionEnumerator<T> : IEnumerator<T>
 {
@@ -227,5 +228,15 @@ public static class OptionExtensionMethods
     public static Option<T> ToOption<T>(this T value)
     {
         return value != null ? Option.Create(value) : Option.Empty;
+    }
+
+    public static Option<T> FirstOption<T>(this IEnumerable<T> source)
+    {
+        return source.FirstOrDefault().ToOption();
+    }
+
+    public static Option<T> FirstOption<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+    {
+        return source.FirstOrDefault(predicate).ToOption();
     }
 }
