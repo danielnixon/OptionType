@@ -191,6 +191,21 @@ public struct Option<T> : IEquatable<Option<T>>, IEnumerable, IEnumerable<T>
         }
     }
 
+    public Option<TResult> Zip<TSecond, TResult>(Option<TSecond> second, Func<T, TSecond, TResult> resultSelector)
+    {
+        return HasValue && second.HasValue ? resultSelector (Value, second.Value).ToOption() : Option.Empty;
+    }
+
+    public Option<Tuple<T, TSecond>> Zip<TSecond>(Option<TSecond> second)
+    {
+        return Zip(second, (item1, item2) => Tuple.Create(item1, item2));
+    }
+
+    public Option<T> DefaultIfEmpty(T defaultValue)
+    {
+        return HasValue ? this : defaultValue.ToOption();
+    }
+
     IEnumerator<T> IEnumerable<T>.GetEnumerator()
     {
         return new OptionEnumerator<T>(this);
