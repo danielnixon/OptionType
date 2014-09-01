@@ -1,5 +1,6 @@
 language: c
 install:
-  - sudo apt-get install mono-devel mono-gmcs
+  - sudo apt-get install mono-devel mono-gmcs nunit-console
 script:
   - xbuild
+  - nunit-console ./OptionTests/bin/Debug/OptionTests.dll
