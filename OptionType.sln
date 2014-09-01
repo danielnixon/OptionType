@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptionType", "Option\OptionType.csproj", "{60F43A69-BE69-4E52-A1FF-5D63918D2E82}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptionType", "OptionType\OptionType.csproj", "{60F43A69-BE69-4E52-A1FF-5D63918D2E82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptionTypeTests", "OptionTests\OptionTypeTests.csproj", "{0BE1F7F5-3A90-42C8-9A39-BD1F73A9319C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptionTypeTests", "OptionTypeTests\OptionTypeTests.csproj", "{0BE1F7F5-3A90-42C8-9A39-BD1F73A9319C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,7 +21,7 @@ Global
 		{60F43A69-BE69-4E52-A1FF-5D63918D2E82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = OptionTests\OptionTypeTests.csproj
+		StartupItem = OptionType\OptionType.csproj
 		Policies = $0
 		$0.DotNetNamingPolicy = $1
 		$1.DirectoryNamespaceAssociation = None

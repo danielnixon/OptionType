@@ -38,7 +38,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Option\OptionType.csproj">
+    <ProjectReference Include="..\OptionType\OptionType.csproj">
       <Project>{60F43A69-BE69-4E52-A1FF-5D63918D2E82}</Project>
       <Name>OptionType</Name>
     </ProjectReference>
