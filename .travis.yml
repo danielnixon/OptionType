@@ -3,4 +3,4 @@ install:
   - sudo apt-get install mono-devel mono-gmcs nunit-console
 script:
   - xbuild
-  - nunit-console ./OptionTests/bin/Debug/OptionTests.dll
+  - nunit-console ./OptionTypeTests/bin/Debug/OptionTypeTests.dll

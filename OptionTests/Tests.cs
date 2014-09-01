@@ -96,11 +96,11 @@ namespace OptionTypeTests
 
 		[Test]
 		public void SelectManyEmpty()
-		{
-			Option<int> foo = Option.Empty;
-			Option<Option<int>> bar = foo.ToOption();
-			Assert.AreEqual(foo, bar.SelectMany(x => x));
-		}
+        {
+            Option<int> foo = Option.Empty;
+            Option<Option<int>> bar = foo.ToOption();
+            Assert.AreEqual(foo, bar.SelectMany(x => x));
+        }
 
 		[Test]
 		public void ValueNonEmpty()
