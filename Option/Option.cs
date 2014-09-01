@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace org.danielnixon.Option
+namespace OptionType
 {
 	public class OptionEnumerator<T> : IEnumerator<T>
 	{
@@ -206,6 +206,11 @@ namespace org.danielnixon.Option
 		public Option<T> DefaultIfEmpty(T defaultValue)
 		{
 			return HasValue ? this : defaultValue.ToOption();
+		}
+
+		public TResult Fold<TResult>(Func<TResult> ifEmpty, Func<T, TResult> resultSelector)
+		{
+			return HasValue ? resultSelector(Value) : ifEmpty();
 		}
 
 		IEnumerator<T> IEnumerable<T>.GetEnumerator()
