@@ -87,6 +87,22 @@ namespace OptionTypeTests
 		}
 
 		[Test]
+		public void SelectManyNonEmpty()
+		{
+			Option<int> foo = 1.ToOption();
+			Option<Option<int>> bar = foo.ToOption();
+			Assert.AreEqual(foo, bar.SelectMany(x => x));
+		}
+
+		[Test]
+		public void SelectManyEmpty()
+		{
+			Option<int> foo = Option.Empty;
+			Option<Option<int>> bar = foo.ToOption();
+			Assert.AreEqual(foo, bar.SelectMany(x => x));
+		}
+
+		[Test]
 		public void ValueNonEmpty()
 		{
 			var foo = "foo".ToOption();
@@ -97,7 +113,11 @@ namespace OptionTypeTests
 		public void ValueEmpty()
 		{
 			Option<string> foo = Option.Empty;
-			Assert.Throws<InvalidOperationException>(delegate { var v = foo.Value; });
+			Assert.Throws<InvalidOperationException> (() => {
+				#pragma warning disable 219
+				var v = foo.Value;
+				#pragma warning restore 219
+			});
 		}
 
 		[Test]
