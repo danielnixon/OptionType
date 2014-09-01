@@ -6,7 +6,7 @@
     <ProjectGuid>{60F43A69-BE69-4E52-A1FF-5D63918D2E82}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>OptionType</RootNamespace>
-    <AssemblyName>Option</AssemblyName>
+    <AssemblyName>OptionType</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
