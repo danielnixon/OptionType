@@ -113,6 +113,59 @@ namespace OptionTypeTests
 			Assert.AreEqual(expected, actual);
 		}
 
+        [Test]
+        public void ForEachNonEmpty()
+        {
+            var foo = Option.Create("foo");
+            var i = 0;
+
+            foo.ForEach(x =>
+            {
+                i++;
+                Assert.AreEqual("foo", x);
+            });
+
+            Assert.AreEqual(1, i);
+        }
+
+        [Test]
+        public void ForEachEmpty()
+        {
+            var foo = Option<string>.Empty;
+            var i = 0;
+            foo.ForEach(x => i++);
+            Assert.AreEqual(0, i);
+        }
+
+        [Test]
+        public void ForEachLoopNonEmpty()
+        {
+            var foo = Option.Create("foo");
+            var i = 0;
+
+            foreach(var x in foo)
+            {
+                i++;
+                Assert.AreEqual("foo", x);
+            };
+
+            Assert.AreEqual(1, i);
+        }
+
+        [Test]
+        public void ForEachLoopEmpty()
+        {
+            var foo = Option<string>.Empty;
+            var i = 0;
+
+            foreach (var x in foo)
+            {
+                i++;
+            };
+
+            Assert.AreEqual(0, i);
+        }
+
 		[Test]
 		public void HasValueNonEmpty()
 		{
