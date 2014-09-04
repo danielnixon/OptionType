@@ -12,7 +12,7 @@ namespace OptionTypeTests
 		[Test]
 		public void AllNonEmpty()
 		{
-			var foo = "foo".ToOption();
+			var foo = Option.Create("foo");
 			Assert.IsTrue(foo.All(x => x.StartsWith("f")));
 			Assert.IsFalse(foo.All(x => x.StartsWith("a")));
 		}
@@ -27,7 +27,7 @@ namespace OptionTypeTests
 		[Test]
 		public void AnyNonEmpty()
 		{
-			var foo = "foo".ToOption();
+            var foo = Option.Create("foo");
             Assert.IsTrue(foo.Any());
 			Assert.IsTrue(foo.Any(x => x.StartsWith("f")));
 			Assert.IsFalse(foo.All(x => x.StartsWith("a")));
@@ -98,7 +98,7 @@ namespace OptionTypeTests
 		[Test]
 		public void FoldNonEmpty()
 		{
-			var foo = "foo".ToOption();
+            var foo = Option.Create("foo");
 			var expected = "foo";
 			var actual = foo.Fold(() => "bar", r => r);
 			Assert.AreEqual(expected, actual);
@@ -132,9 +132,7 @@ namespace OptionTypeTests
         public void ForEachEmpty()
         {
             var foo = Option<string>.Empty;
-            var i = 0;
-            foo.ForEach(x => i++);
-            Assert.AreEqual(0, i);
+            foo.ForEach(x => Assert.Fail());
         }
 
         [Test]
@@ -143,11 +141,11 @@ namespace OptionTypeTests
             var foo = Option.Create("foo");
             var i = 0;
 
-            foreach(var x in foo)
+            foreach (var x in foo)
             {
                 i++;
                 Assert.AreEqual("foo", x);
-            };
+            }
 
             Assert.AreEqual(1, i);
         }
@@ -156,20 +154,16 @@ namespace OptionTypeTests
         public void ForEachLoopEmpty()
         {
             var foo = Option<string>.Empty;
-            var i = 0;
-
             foreach (var x in foo)
             {
-                i++;
-            };
-
-            Assert.AreEqual(0, i);
+                Assert.Fail();
+            }
         }
 
 		[Test]
 		public void HasValueNonEmpty()
 		{
-			var foo = "foo".ToOption();
+            var foo = Option.Create("foo");
 			Assert.IsTrue(foo.HasValue);
 		}
 
@@ -212,10 +206,22 @@ namespace OptionTypeTests
             Assert.AreEqual(foo, bar.SelectMany(x => x));
         }
 
+        [Test]
+        public void ToOptionNonEmpty()
+        {
+            Assert.AreEqual(Option.Create("foo"), "foo".ToOption());
+        }
+
+        [Test]
+        public void ToOptionEmpty()
+        {
+            Assert.AreEqual(Option<string>.Empty, ((string)null).ToOption());
+        }
+
 		[Test]
 		public void ValueNonEmpty()
 		{
-			var foo = "foo".ToOption();
+            var foo = Option.Create("foo");
 			Assert.AreEqual("foo", foo.Value);
 		}
 
@@ -233,7 +239,7 @@ namespace OptionTypeTests
 		[Test]
 		public void WhereNonEmpty()
 		{
-			var foo = "foo".ToOption();
+            var foo = Option.Create("foo");
             var empty = Option<string>.Empty;
 			Assert.AreEqual(foo, foo.Where(x => x.StartsWith("f")));
 			Assert.AreEqual(empty, foo.Where(x => x.StartsWith("a")));
