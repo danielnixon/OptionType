@@ -6,40 +6,40 @@ using System.Linq;
 
 namespace OptionTypeTests
 {
-	[TestFixture]
-	public class Tests
-	{
-		[Test]
-		public void AllNonEmpty()
-		{
-			var foo = Option.Create("foo");
-			Assert.IsTrue(foo.All(x => x.StartsWith("f")));
-			Assert.IsFalse(foo.All(x => x.StartsWith("a")));
-		}
+    [TestFixture]
+    public class Tests
+    {
+        [Test]
+        public void AllNonEmpty()
+        {
+            var foo = Option.Create("foo");
+            Assert.IsTrue(foo.All(x => x.StartsWith("f")));
+            Assert.IsFalse(foo.All(x => x.StartsWith("a")));
+        }
 
-		[Test]
-		public void AllEmpty()
-		{
-			var foo = Option<string>.Empty;
-			Assert.IsTrue(foo.All(x => x.StartsWith("f")));
-		}
+        [Test]
+        public void AllEmpty()
+        {
+            var foo = Option<string>.Empty;
+            Assert.IsTrue(foo.All(x => x.StartsWith("f")));
+        }
 
-		[Test]
-		public void AnyNonEmpty()
-		{
+        [Test]
+        public void AnyNonEmpty()
+        {
             var foo = Option.Create("foo");
             Assert.IsTrue(foo.Any());
-			Assert.IsTrue(foo.Any(x => x.StartsWith("f")));
-			Assert.IsFalse(foo.All(x => x.StartsWith("a")));
-		}
+            Assert.IsTrue(foo.Any(x => x.StartsWith("f")));
+            Assert.IsFalse(foo.All(x => x.StartsWith("a")));
+        }
 
-		[Test]
-		public void AnyEmpty()
-		{
-			var foo = Option<string>.Empty;
+        [Test]
+        public void AnyEmpty()
+        {
+            var foo = Option<string>.Empty;
             Assert.IsFalse(foo.Any());
-			Assert.IsFalse(foo.Any(x => x.StartsWith("f")));
-		}
+            Assert.IsFalse(foo.Any(x => x.StartsWith("f")));
+        }
 
         [Test]
         public void DefaultIfEmptyNonEmpty()
@@ -95,23 +95,23 @@ namespace OptionTypeTests
             Assert.AreEqual(expected, foo.FirstOption(x => x == "foo"));
         }
 
-		[Test]
-		public void FoldNonEmpty()
-		{
+        [Test]
+        public void FoldNonEmpty()
+        {
             var foo = Option.Create("foo");
-			var expected = "foo";
-			var actual = foo.Fold(() => "bar", r => r);
-			Assert.AreEqual(expected, actual);
-		}
+            var expected = "foo";
+            var actual = foo.Fold(() => "bar", r => r);
+            Assert.AreEqual(expected, actual);
+        }
 
-		[Test]
-		public void FoldEmpty()
-		{
+        [Test]
+        public void FoldEmpty()
+        {
             var foo = Option<string>.Empty;
-			var expected = "bar";
-			var actual = foo.Fold(() => "bar", r => r);
-			Assert.AreEqual(expected, actual);
-		}
+            var expected = "bar";
+            var actual = foo.Fold(() => "bar", r => r);
+            Assert.AreEqual(expected, actual);
+        }
 
         [Test]
         public void ForEachNonEmpty()
@@ -160,46 +160,46 @@ namespace OptionTypeTests
             }
         }
 
-		[Test]
-		public void HasValueNonEmpty()
-		{
+        [Test]
+        public void HasValueNonEmpty()
+        {
             var foo = Option.Create("foo");
-			Assert.IsTrue(foo.HasValue);
-		}
+            Assert.IsTrue(foo.HasValue);
+        }
 
-		[Test]
-		public void HasValueEmpty()
-		{
+        [Test]
+        public void HasValueEmpty()
+        {
             var foo = Option<string>.Empty;
-			Assert.IsFalse(foo.HasValue);
-		}
+            Assert.IsFalse(foo.HasValue);
+        }
 
-		[Test]
-		public void SelectNonEmpty()
-		{
-			var foo = 1.ToOption();
-			var expected = 2.ToOption();
-			Assert.AreEqual(expected, foo.Select(x => x + 1));
-		}
+        [Test]
+        public void SelectNonEmpty()
+        {
+            var foo = 1.ToOption();
+            var expected = 2.ToOption();
+            Assert.AreEqual(expected, foo.Select(x => x + 1));
+        }
 
-		[Test]
-		public void SelectEmpty()
-		{
+        [Test]
+        public void SelectEmpty()
+        {
             var foo = Option<int>.Empty;
             var expected = Option<int>.Empty;
-			Assert.AreEqual(expected, foo.Select(x => x + 1));
-		}
+            Assert.AreEqual(expected, foo.Select(x => x + 1));
+        }
 
-		[Test]
-		public void SelectManyNonEmpty()
-		{
-			var foo = 1.ToOption();
-			var bar = foo.ToOption();
-			Assert.AreEqual(foo, bar.SelectMany(x => x));
-		}
+        [Test]
+        public void SelectManyNonEmpty()
+        {
+            var foo = 1.ToOption();
+            var bar = foo.ToOption();
+            Assert.AreEqual(foo, bar.SelectMany(x => x));
+        }
 
-		[Test]
-		public void SelectManyEmpty()
+        [Test]
+        public void SelectManyEmpty()
         {
             var foo = Option<int>.Empty;
             var bar = foo.ToOption();
@@ -218,40 +218,53 @@ namespace OptionTypeTests
             Assert.AreEqual(Option<string>.Empty, ((string)null).ToOption());
         }
 
-		[Test]
-		public void ValueNonEmpty()
-		{
+        [Test]
+        public void ToOptionNullableStructNonEmpty()
+        {
+            Assert.AreEqual(Option.Create(1), Option.Create((int?)1));
+        }
+
+        [Test]
+        public void ToOptionNullableStructEmpty()
+        {
+            Assert.AreEqual(Option<int>.Empty, Option.Create((int?)null));
+        }
+
+        [Test]
+        public void ValueNonEmpty()
+        {
             var foo = Option.Create("foo");
-			Assert.AreEqual("foo", foo.Value);
-		}
+            Assert.AreEqual("foo", foo.Value);
+        }
 
-		[Test]
-		public void ValueEmpty()
-		{
+        [Test]
+        public void ValueEmpty()
+        {
             var foo = Option<string>.Empty;
-			Assert.Throws<InvalidOperationException> (() => {
-				#pragma warning disable 219
-				var v = foo.Value;
-				#pragma warning restore 219
-			});
-		}
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+#pragma warning disable 219
+                var v = foo.Value;
+#pragma warning restore 219
+            });
+        }
 
-		[Test]
-		public void WhereNonEmpty()
-		{
+        [Test]
+        public void WhereNonEmpty()
+        {
             var foo = Option.Create("foo");
             var empty = Option<string>.Empty;
-			Assert.AreEqual(foo, foo.Where(x => x.StartsWith("f")));
-			Assert.AreEqual(empty, foo.Where(x => x.StartsWith("a")));
-		}
+            Assert.AreEqual(foo, foo.Where(x => x.StartsWith("f")));
+            Assert.AreEqual(empty, foo.Where(x => x.StartsWith("a")));
+        }
 
-		[Test]
-		public void WhereEmpty()
-		{
+        [Test]
+        public void WhereEmpty()
+        {
             var foo = Option<string>.Empty;
             var empty = Option<string>.Empty;
-			Assert.AreEqual(empty, foo.Where(x => x.StartsWith("a")));
-		}
+            Assert.AreEqual(empty, foo.Where(x => x.StartsWith("a")));
+        }
 
         [Test]
         public void ZipNonEmpty()
@@ -324,5 +337,5 @@ namespace OptionTypeTests
             var expected = Option<string>.Empty;
             Assert.AreEqual(expected, left.Zip(right, (l, r) => l + r));
         }
-	}
+    }
 }

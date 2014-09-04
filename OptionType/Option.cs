@@ -7,259 +7,271 @@ using System.Linq;
 
 namespace OptionType
 {
-	public class OptionEnumerator<T> : IEnumerator<T>
-	{
-		private readonly Option<T> option;
-		private readonly int length;
-		private int index;
+    public class OptionEnumerator<T> : IEnumerator<T>
+    {
+        private readonly Option<T> option;
+        private readonly int length;
+        private int index;
 
-		public OptionEnumerator(Option<T> option)
-		{
-			this.option = option;
-			length = option.HasValue ? 1 : 0;
-			index = -1;
-		}
+        public OptionEnumerator(Option<T> option)
+        {
+            this.option = option;
+            length = option.HasValue ? 1 : 0;
+            index = -1;
+        }
 
-		public bool MoveNext()
-		{
-			index += 1;
-			return index < length;
-		}
+        public bool MoveNext()
+        {
+            index += 1;
+            return index < length;
+        }
 
-		public void Reset()
-		{
-			index = -1;
-		}
+        public void Reset()
+        {
+            index = -1;
+        }
 
-		T IEnumerator<T>.Current
-		{
-			get
-			{
-				return option.Value;
-			}
-		}
+        T IEnumerator<T>.Current
+        {
+            get
+            {
+                return option.Value;
+            }
+        }
 
-		object IEnumerator.Current
-		{
-			get
-			{
-				return option.Value;
-			}
-		}
+        object IEnumerator.Current
+        {
+            get
+            {
+                return option.Value;
+            }
+        }
 
-		public void Dispose()
-		{
-		}
-	}
+        public void Dispose()
+        {
+        }
+    }
 
-	[Serializable]
-	[SuppressMessage("Microsoft.Naming", "CA1716")]
-	[DebuggerDisplay("HasValue: {m_hasValue}, Value: {m_value}")]
-	public struct Option<T> : IEquatable<Option<T>>, IEnumerable, IEnumerable<T>
-	{
-		private readonly T m_value;
-		private readonly bool m_hasValue;
+    [Serializable]
+    [SuppressMessage("Microsoft.Naming", "CA1716")]
+    [DebuggerDisplay("HasValue: {m_hasValue}, Value: {m_value}")]
+    public struct Option<T> : IEquatable<Option<T>>, IEnumerable, IEnumerable<T>
+    {
+        private readonly T m_value;
+        private readonly bool m_hasValue;
 
-		public static Option<T> Empty
-		{
-			get { return new Option<T>(); }
-		}
+        public static Option<T> Empty
+        {
+            get { return new Option<T>(); }
+        }
 
-		public bool HasValue
-		{
-			get { return m_hasValue; }
-		}
+        public bool HasValue
+        {
+            get { return m_hasValue; }
+        }
 
-		[DebuggerDisplay("m_value")]
-		public T Value
-		{
-			get
-			{
-				if (!HasValue)
-				{
-					throw new InvalidOperationException("Option does not have a value");
-				}
+        [DebuggerDisplay("m_value")]
+        public T Value
+        {
+            get
+            {
+                if (!HasValue)
+                {
+                    throw new InvalidOperationException("Option does not have a value");
+                }
 
-				return m_value;
-			}
-		}
+                return m_value;
+            }
+        }
 
-		public T ValueOrDefault
-		{
-			get { return m_hasValue ? m_value : default(T); }
-		}
+        public T ValueOrDefault
+        {
+            get { return m_hasValue ? m_value : default(T); }
+        }
 
-		public Option(T value)
-		{
-			m_hasValue = true;
-			m_value = value;
-		}
+        public Option(T value)
+        {
+            m_hasValue = true;
+            m_value = value;
+        }
 
-		#region Operators
+        #region Operators
 
-		[SuppressMessage("Microsoft.Usage", "CA1801")]
-		[SuppressMessage("Microsoft.Usage", "CA2225")]
-		public static implicit operator Option<T>(Option option)
-		{
-			return Option<T>.Empty;
-		}
+        [SuppressMessage("Microsoft.Usage", "CA1801")]
+        [SuppressMessage("Microsoft.Usage", "CA2225")]
+        public static implicit operator Option<T>(Option option)
+        {
+            return Option<T>.Empty;
+        }
 
-		[SuppressMessage("Microsoft.Usage", "CA1801")]
-		public static implicit operator Option<T>(T value)
-		{
-			return new Option<T>(value);
-		}
+        [SuppressMessage("Microsoft.Usage", "CA1801")]
+        public static implicit operator Option<T>(T value)
+        {
+            return new Option<T>(value);
+        }
 
-		public static bool operator ==(Option<T> left, Option<T> right)
-		{
-			return left.Equals(right);
-		}
-		public static bool operator !=(Option<T> left, Option<T> right)
-		{
-			return !left.Equals(right);
-		}
+        public static bool operator ==(Option<T> left, Option<T> right)
+        {
+            return left.Equals(right);
+        }
+        public static bool operator !=(Option<T> left, Option<T> right)
+        {
+            return !left.Equals(right);
+        }
 
-		#endregion
+        #endregion
 
-		#region IEquatable<T> Members
+        #region IEquatable<T> Members
 
-		public bool Equals(Option<T> other)
-		{
-			if (other.HasValue != this.HasValue)
-			{
-				return false;
-			}
+        public bool Equals(Option<T> other)
+        {
+            if (other.HasValue != this.HasValue)
+            {
+                return false;
+            }
 
-			// Both don't have a value
-			if (!other.HasValue)
-			{
-				return true;
-			}
+            // Both don't have a value
+            if (!other.HasValue)
+            {
+                return true;
+            }
 
-			return EqualityComparer<T>.Default.Equals(m_value, other.Value);
-		}
+            return EqualityComparer<T>.Default.Equals(m_value, other.Value);
+        }
 
-		#endregion
+        #endregion
 
-		#region Overrides
+        #region Overrides
 
-		public override bool Equals(object obj)
-		{
-			if (obj is Option<T>)
-			{
-				return Equals((Option<T>)obj);
-			}
+        public override bool Equals(object obj)
+        {
+            if (obj is Option<T>)
+            {
+                return Equals((Option<T>)obj);
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		public override int GetHashCode()
-		{
-			if (!HasValue)
-			{
-				return 0;
-			}
+        public override int GetHashCode()
+        {
+            if (!HasValue)
+            {
+                return 0;
+            }
 
-			return EqualityComparer<T>.Default.GetHashCode(m_value);
-		}
+            return EqualityComparer<T>.Default.GetHashCode(m_value);
+        }
 
-		#endregion
+        #endregion
 
-		public T ValueOrElse(T defaultValue)
-		{
-			return HasValue ? Value : defaultValue;
-		}
+        public T ValueOrElse(T defaultValue)
+        {
+            return HasValue ? Value : defaultValue;
+        }
 
-		public Option<TResult> Select<TResult>(Func<T, TResult> selector)
-		{
-			return HasValue ? selector(Value).ToOption() : Option.Empty;
-		}
+        public Option<TResult> Select<TResult>(Func<T, TResult> selector)
+        {
+            return HasValue ? selector(Value).ToOption() : Option.Empty;
+        }
 
-		public Option<TResult> SelectMany<TResult>(Func<T, Option<TResult>> selector)
-		{
-			return HasValue ? selector(Value) : Option.Empty;
-		}
+        public Option<TResult> SelectMany<TResult>(Func<T, Option<TResult>> selector)
+        {
+            return HasValue ? selector(Value) : Option.Empty;
+        }
 
-		public Option<T> Where(Func<T, bool> predicate)
-		{
-			return HasValue && predicate(Value) ? this : Option.Empty;
-		}
+        public Option<T> Where(Func<T, bool> predicate)
+        {
+            return HasValue && predicate(Value) ? this : Option.Empty;
+        }
 
-		public void ForEach(Action<T> action)
-		{
-			if (HasValue)
-			{
-				action(Value);
-			}
-		}
+        public void ForEach(Action<T> action)
+        {
+            if (HasValue)
+            {
+                action(Value);
+            }
+        }
 
-		public Option<TResult> Zip<TSecond, TResult>(Option<TSecond> second, Func<T, TSecond, TResult> resultSelector)
-		{
-			return HasValue && second.HasValue ? resultSelector (Value, second.Value).ToOption() : Option.Empty;
-		}
+        public Option<TResult> Zip<TSecond, TResult>(Option<TSecond> second, Func<T, TSecond, TResult> resultSelector)
+        {
+            return HasValue && second.HasValue ? resultSelector(Value, second.Value).ToOption() : Option.Empty;
+        }
 
-		public Option<Tuple<T, TSecond>> Zip<TSecond>(Option<TSecond> second)
-		{
-			return Zip(second, (item1, item2) => Tuple.Create(item1, item2));
-		}
+        public Option<Tuple<T, TSecond>> Zip<TSecond>(Option<TSecond> second)
+        {
+            return Zip(second, (item1, item2) => Tuple.Create(item1, item2));
+        }
 
-		public Option<T> DefaultIfEmpty(T defaultValue)
-		{
-			return HasValue ? this : defaultValue.ToOption();
-		}
+        public Option<T> DefaultIfEmpty(T defaultValue)
+        {
+            return HasValue ? this : defaultValue.ToOption();
+        }
 
-		public TResult Fold<TResult>(Func<TResult> ifEmpty, Func<T, TResult> resultSelector)
-		{
-			return HasValue ? resultSelector(Value) : ifEmpty();
-		}
+        public TResult Fold<TResult>(Func<TResult> ifEmpty, Func<T, TResult> resultSelector)
+        {
+            return HasValue ? resultSelector(Value) : ifEmpty();
+        }
 
-		IEnumerator<T> IEnumerable<T>.GetEnumerator()
-		{
-			return new OptionEnumerator<T>(this);
-		}
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return new OptionEnumerator<T>(this);
+        }
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return ((IEnumerable<T>)this).GetEnumerator();
-		}
-	}
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable<T>)this).GetEnumerator();
+        }
+    }
 
-	[Serializable]
-	[SuppressMessage("Microsoft.Naming", "CA1716")]
-	public sealed class Option
-	{
-		private static Option s_empty = new Option();
+    [Serializable]
+    [SuppressMessage("Microsoft.Naming", "CA1716")]
+    public sealed class Option
+    {
+        private static Option s_empty = new Option();
 
-		private Option()
-		{
-		}
+        private Option()
+        {
+        }
 
-		public static Option<T> Create<T>(T value)
-		{
-			return new Option<T>(value);
-		}
+        public static Option<T> Create<T>(T value)
+        {
+            return value != null ? new Option<T>(value) : Option.Empty;
+        }
 
-		public static Option Empty
-		{
-			get { return s_empty; }
-		}
-	}
+        public static Option<T> Create<T>(Nullable<T> value)
+            where T : struct
+        {
+            return value.HasValue ? Option.Create(value.Value) : Option.Empty;
+        }
 
-	public static class OptionExtensionMethods
-	{
-		public static Option<T> ToOption<T>(this T value)
-		{
-			return value != null ? Option.Create(value) : Option.Empty;
-		}
+        public static Option Empty
+        {
+            get { return s_empty; }
+        }
+    }
 
-		public static Option<T> FirstOption<T>(this IEnumerable<T> source)
-		{
-			return source.FirstOrDefault().ToOption();
-		}
+    public static class OptionExtensionMethods
+    {
+        public static Option<T> ToOption<T>(this T value)
+        {
+            return Option.Create(value);
+        }
 
-		public static Option<T> FirstOption<T>(this IEnumerable<T> source, Func<T, bool> predicate)
-		{
-			return source.FirstOrDefault(predicate).ToOption();
-		}
-	}
+        public static Option<T> ToOption<T>(this Nullable<T> value)
+            where T : struct
+        {
+            return Option.Create(value);
+        }
+
+        public static Option<T> FirstOption<T>(this IEnumerable<T> source)
+        {
+            return source.FirstOrDefault().ToOption();
+        }
+
+        public static Option<T> FirstOption<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            return source.FirstOrDefault(predicate).ToOption();
+        }
+    }
 }
