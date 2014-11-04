@@ -170,6 +170,11 @@ namespace OptionType
             return HasValue ? Value : defaultValue;
         }
 
+        public Option<T> OrElse(Option<T> alternative)
+        {
+            return HasValue ? this : alternative;
+        }
+
         public Option<TResult> Select<TResult>(Func<T, TResult> selector)
         {
             return HasValue ? selector(Value).ToOption() : Option.Empty;
@@ -178,6 +183,12 @@ namespace OptionType
         public Option<TResult> SelectMany<TResult>(Func<T, Option<TResult>> selector)
         {
             return HasValue ? selector(Value) : Option.Empty;
+        }
+
+        public Option<TResult> SelectMany<TResult>(Func<T, Nullable<TResult>> selector)
+            where TResult : struct
+        {
+            return HasValue ? selector(Value).ToOption() : Option.Empty;
         }
 
         public Option<T> Where(Func<T, bool> predicate)
@@ -264,6 +275,12 @@ namespace OptionType
             return Option.Create(value);
         }
 
+        public static Nullable<T> ToNullable<T>(this Option<T> option)
+            where T : struct
+        {
+            return option.HasValue ? option.Value : (Nullable<T>)null;
+        }
+
         public static Option<T> FirstOption<T>(this IEnumerable<T> source)
         {
             return source.FirstOrDefault().ToOption();
@@ -272,6 +289,12 @@ namespace OptionType
         public static Option<T> FirstOption<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             return source.FirstOrDefault(predicate).ToOption();
+        }
+
+        public static Option<T> OrElse<T>(this Option<T> option, Nullable<T> alternative)
+            where T : struct
+        {
+            return option.HasValue ? option : alternative.ToOption();
         }
     }
 }

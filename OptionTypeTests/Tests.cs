@@ -175,6 +175,76 @@ namespace OptionTypeTests
         }
 
         [Test]
+        public void ValueOrElseNonEmpty()
+        {
+            var foo = 1.ToOption();
+            var expected = 1;
+            Assert.AreEqual(expected, foo.ValueOrElse(2));
+        }
+
+        [Test]
+        public void ValueOrElseEmpty()
+        {
+            var foo = Option<int>.Empty;
+            var expected = 2;
+            Assert.AreEqual(expected, foo.ValueOrElse(2));
+        }
+
+        [Test]
+        public void OrElseNonEmpty()
+        {
+            var foo = 1.ToOption();
+            var expected = 1.ToOption();
+            Assert.AreEqual(expected, foo.OrElse(2.ToOption()));
+            Assert.AreEqual(expected, foo.OrElse(Option<int>.Empty));
+        }
+
+        [Test]
+        public void OrElseEmpty()
+        {
+            var empty = Option<int>.Empty;
+            var foo = Option<int>.Empty;
+            Assert.AreEqual(2.ToOption(), foo.OrElse(2.ToOption()));
+            Assert.AreEqual(empty, foo.OrElse(empty));
+        }
+
+        [Test]
+        public void OrElseNonEmptyNullableNotNull()
+        {
+            var other = (Nullable<int>)2;
+            var expected = 1.ToOption();
+            var foo = 1.ToOption();
+            Assert.AreEqual(expected, foo.OrElse(other));
+        }
+
+        [Test]
+        public void OrElseNonEmptyNullableNull()
+        {
+            var other = (Nullable<int>)null;
+            var expected = 1.ToOption();
+            var foo = 1.ToOption();
+            Assert.AreEqual(expected, foo.OrElse(other));
+        }
+
+        [Test]
+        public void OrElseEmptyNullableNotNull()
+        {
+            var other = (Nullable<int>)1;
+            var expected = 1.ToOption();
+            var foo = Option<int>.Empty;
+            Assert.AreEqual(expected, foo.OrElse(other));
+        }
+
+        [Test]
+        public void OrElseEmptyNullableNull()
+        {
+            var other = (Nullable<int>)null;
+            var expected = Option<int>.Empty;
+            var foo = Option<int>.Empty;
+            Assert.AreEqual(expected, foo.OrElse(other));
+        }
+
+        [Test]
         public void SelectNonEmpty()
         {
             var foo = 1.ToOption();
@@ -204,6 +274,23 @@ namespace OptionTypeTests
             var foo = Option<int>.Empty;
             var bar = foo.ToOption();
             Assert.AreEqual(foo, bar.SelectMany(x => x));
+        }
+
+        [Test]
+        public void SelectManyNullable()
+        {
+            var expected = 42.ToOption();
+            var foo = 1.ToOption();
+            var nullable = new Nullable<int>(42);
+            Assert.AreEqual(expected, foo.SelectMany(x => nullable));
+        }
+
+        [Test]
+        public void ToNullable()
+        {
+            Assert.AreEqual(null, Option<int>.Empty.ToNullable());
+            var expected = new Nullable<int>(42);
+            Assert.AreEqual(expected, 42.ToOption().ToNullable());
         }
 
         [Test]
