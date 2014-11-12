@@ -70,6 +70,7 @@ namespace OptionType
             get { return m_hasValue; }
         }
 
+        /// <exception cref="System.InvalidOperationException">The Option&lt;T&gt;.HasValue property is false.</exception>
         [DebuggerDisplay("m_value")]
         public T Value
         {
@@ -77,7 +78,7 @@ namespace OptionType
             {
                 if (!HasValue)
                 {
-                    throw new InvalidOperationException("Option does not have a value");
+                    throw new InvalidOperationException("Option does not have a value.");
                 }
 
                 return m_value;
