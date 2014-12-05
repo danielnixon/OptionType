@@ -292,6 +292,16 @@ namespace OptionType
             return source.FirstOrDefault(predicate).ToOption();
         }
 
+        public static Option<T> SingleOption<T>(this IEnumerable<T> source)
+        {
+            return source.SingleOrDefault().ToOption();
+        }
+
+        public static Option<T> SingleOption<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            return source.SingleOrDefault(predicate).ToOption();
+        }
+
         public static Option<T> OrElse<T>(this Option<T> option, Nullable<T> alternative)
             where T : struct
         {
