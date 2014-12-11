@@ -1,7 +1,2 @@
 language: csharp
 solution: OptionType.sln
-install:
-  - sudo apt-get install mono-devel mono-gmcs nunit-console
-script:
-  - xbuild
-  - nunit-console ./OptionTypeTests/bin/Debug/OptionTypeTests.dll
