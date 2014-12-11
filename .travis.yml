@@ -1,2 +1,5 @@
 language: csharp
 solution: OptionType.sln
+script:
+  - xbuild
+  - nunit-console ./OptionTypeTests/bin/Debug/OptionTypeTests.dll
